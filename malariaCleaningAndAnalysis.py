@@ -65,3 +65,56 @@ Malaria.head()
 
 #%%
 #put our table in form of pandas dataframe for analysis
+df = pd.DataFrame(Malaria)
+
+#%%
+df
+
+#%%
+#Descriptive statistics/analysis
+
+#%%
+df['State'].value_counts()
+
+
+#%%
+df['Has Electricity'].value_counts()
+
+
+#%%
+df['Source of Drinking Water'].value_counts()
+
+
+#%%
+df['Wealth Index'].value_counts()
+
+
+#%%
+df['Has Mosquito Bed Net for Sleeping'].value_counts()
+
+
+#%%
+df.groupby('Wealth Index')['State'].describe()
+
+#%% [markdown]
+# From the table above, Lagos State has the top number of richest people and Sokoto State has the top number of poorest people.
+
+#%%
+df.groupby('Has Mosquito Bed Net for Sleeping')['State'].describe()
+
+#%% [markdown]
+# From above table Bauchi State has the Highest number of people with Mosquito Bed Net for Sleeping, While Edo State has the least Number.
+
+#%%
+df.groupby('Has Electricity')['State'].describe()
+
+#%% [markdown]
+# From above table Lagos State has the Highest number of people with access to Electricity, While Adamawa State has the least Number.
+
+#%%
+df['Source of Drinking Water'].value_counts()
+
+#%% [markdown]
+# From the table above, most people source of drinking water is Tube Well or Borehole.
+
+#%%
