@@ -118,3 +118,91 @@ df['Source of Drinking Water'].value_counts()
 # From the table above, most people source of drinking water is Tube Well or Borehole.
 
 #%%
+#APPLICATION OF MACHINE LEARNING MODELS
+
+#%%
+Malaria.head()
+
+#%%
+Malaria_ML = pd.read_csv("./NG_2015_MIS_07012019_1354_135943/numeric_nmis.csv")
+
+#%%
+Malaria_ML.head()
+
+#%%
+Malaria_ML.columns=['Case Identification', 'Region', 'Type of Place of Residence', 'Source of Drinking Water', 'Type of Toilet Facility',
+                'Has Electricity', 'Main Floor Material', 'Main Wall Material', 'Main Roof Material', 'Has Bicycle', 'Has Motorcycle/Scooter',
+                'Has Car/Truck', 'Has Mosquito Bed Net for Sleeping', 'Owns Land Suitable for Agriculture', 'Has Bank Account', 
+                'Wealth Index', 'Cost of Treatment for Fever', 'State']
+
+print(Malaria_ML.shape)
+Malaria_ML.head()
+
+#%%
+Malaria_ML.columns=[str.replace('/','or') for str in Malaria_ML.columns]
+
+
+#%%
+Malaria_ML.isnull().sum(axis=0) 
+
+#%%
+Malaria_ML.drop(['Cost of Treatment for Fever','Type of Toilet Facility'], axis=1, inplace=True)
+
+#%%
+Malaria_ML.head()
+
+#%%
+Malaria_ML.tail()
+
+#%%
+def plot_corr(Malaria_ML, size=11):
+    """
+    Function plots a graphical correlation matrix for each pair of columns in the dataframe.
+
+    Input:
+        Malaria: pandas DataFrame
+        size: vertical and horizontal size of the plot
+
+    Displays:
+        matrix of correlation between columns.  Blue-cyan-yellow-red-darkred => less to more correlated
+                                                0 ------------------>  1
+                                                Expect a darkred line running from top left to bottom right
+    """
+
+    corr = Malaria_ML.corr()    # data frame correlation function
+    fig, ax = plt.subplots(figsize=(size, size))
+    ax.matshow(corr)   # color code the rectangles by correlation value
+    plt.xticks(range(len(corr.columns)), corr.columns)
+    # draw x tick marks
+    plt.yticks(range(len(corr.columns)), corr.columns)
+    # draw y tick marks
+
+#%% [markdown]
+# Correlated Feature Check. 
+# Correlation by color. Red is most correlated with other variable, Yellow is self to self correlated and Blue is least correlated with other variable.
+
+#%%
+plot_corr(Malaria_ML)
+
+#%% [markdown]
+# State and Case Identification appears to be correlated.
+# Drop State Column
+
+del Malaria_ML['State']
+
+#%%
+Malaria_ML.head(5)
+
+
+#%%
+Malaria_ML.corr()
+
+#%%
+plot_corr(Malaria_ML)
+
+#%% [markdown]
+# The correlations look good. There appear to be no coorelated columns.
+#%% [markdown]
+# Next we want to check class distribution
+
+
