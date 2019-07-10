@@ -202,7 +202,14 @@ plot_corr(Malaria_ML)
 
 #%% [markdown]
 # The correlations look good. There appear to be no coorelated columns.
-#%% [markdown]
+#%% [markdown]433
 # Next we want to check class distribution
+#%%
+num_obs = len(Malaria_ML)
+num_true = len(Malaria_ML.loc[Malaria_ML['Has Mosquito Bed Net for Sleeping'] == 1])
+num_false = len(Malaria_ML.loc[Malaria_ML['Has Mosquito Bed Net for Sleeping'] == 0])
+print("Number of True cases: " + str(num_true) + str(num_true/num_obs) * 100)
+print("Number of False cases:" + str(num_false) + str(num_false/num_obs) * 100)
 
+#%%
 
