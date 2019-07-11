@@ -101,7 +101,6 @@ df.groupby('Wealth Index')['State'].describe()
 
 #%%
 df.groupby('Has Mosquito Bed Net for Sleeping')['State'].describe()
-
 #%% [markdown]
 # From above table Bauchi State has the Highest number of people with Mosquito Bed Net for Sleeping, While Edo State has the least Number.
 
@@ -177,14 +176,14 @@ def plot_corr(Malaria_ML, size=11):
     plt.yticks(range(len(corr.columns)), corr.columns)
     # draw y tick marks
 
-#%% [markdown]
+#%%
 # Correlated Feature Check. 
 # Correlation by color. Red is most correlated with other variable, Yellow is self to self correlated and Blue is least correlated with other variable.
 
 #%%
 plot_corr(Malaria_ML)
 
-#%% [markdown]
+#%%
 # State and Case Identification appears to be correlated.
 # Drop State Column
 
@@ -200,16 +199,20 @@ Malaria_ML.corr()
 #%%
 plot_corr(Malaria_ML)
 
-#%% [markdown]
+#%%
 # The correlations look good. There appear to be no coorelated columns.
-#%% [markdown]433
 # Next we want to check class distribution
 #%%
 num_obs = len(Malaria_ML)
 num_true = len(Malaria_ML.loc[Malaria_ML['Has Mosquito Bed Net for Sleeping'] == 1])
 num_false = len(Malaria_ML.loc[Malaria_ML['Has Mosquito Bed Net for Sleeping'] == 0])
-print("Number of True cases: " + str(num_true) + str(num_true/num_obs) * 100)
-print("Number of False cases:" + str(num_false) + str(num_false/num_obs) * 100)
+print("Number of True cases: {0} ({1:2.2f}%)".format(num_true, (num_true/num_obs) * 100))
+print("Number of False cases: {0} ({1:2.2f}%)".format(num_false, (num_false/num_obs) * 100))
 
 #%%
 
+
+# Our class distribution is fairly good.
+#%%
+# # Spliting the data
+# 70% for training, 30% for testing
