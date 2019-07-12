@@ -215,3 +215,38 @@ print("Number of False cases: {0} ({1:2.2f}%)".format(num_false, (num_false/num_
 #%%
 # # Spliting the data
 # 70% for training, 30% for testing
+
+#%%
+#from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
+feature_col_names = ['Region', 'Type of Place of Residence', 'Source of Drinking Water', 'Has Electricity', 'Wealth Index', 'Has Bicycle', 'Has MotorcycleorScooter', 'Has CarorTruck' , 'Owns Land Suitable for Agriculture', 'Has Bank Account' , 'Main Floor Material' ,'Main Wall Material' , 'Main Roof Material']
+predicted_class_names = ['Has Mosquito Bed Net for Sleeping']
+
+X = Malaria_ML[feature_col_names].values     # predictor feature columns (8 X m)
+y = Malaria_ML[predicted_class_names].values # predicted class (1=true, 0=false) column (1 X m)
+split_test_size = 0.30
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=split_test_size, random_state=42) 
+# test_size = 0.3 is 30%, 42 is the answer to everything
+
+#%%
+# check we have the the desired 70% train, 30% test split of the data.
+
+#%%
+print("{0:0.2f}% in training set".format((len(X_train)/len(Malaria_ML.index)) * 100))
+print("{0:0.2f}% in test set".format((len(X_test)/len(Malaria_ML.index)) * 100))
+
+#%%
+# Verifying predicted value was split correctly.
+
+#%%
+print("Original True  : {0} ({1:0.2f}%)".format(len(Malaria_ML.loc[Malaria_ML['Has Mosquito Bed Net for Sleeping'] == 1]), (len(Malaria_ML.loc[Malaria_ML['Has Mosquito Bed Net for Sleeping'] == 1])/len(Malaria_ML.index)) * 100.0))
+print("Original False : {0} ({1:0.2f}%)".format(len(Malaria_ML.loc[Malaria_ML['Has Mosquito Bed Net for Sleeping'] == 0]), (len(Malaria_ML.loc[Malaria_ML['Has Mosquito Bed Net for Sleeping'] == 0])/len(Malaria_ML.index)) * 100.0))
+print("")
+print("Training True  : {0} ({1:0.2f}%)".format(len(y_train[y_train[:] == 1]), (len(y_train[y_train[:] == 1])/len(y_train) * 100.0)))
+print("Training False : {0} ({1:0.2f}%)".format(len(y_train[y_train[:] == 0]), (len(y_train[y_train[:] == 0])/len(y_train) * 100.0)))
+print("")
+print("Test True      : {0} ({1:0.2f}%)".format(len(y_test[y_test[:] == 1]), (len(y_test[y_test[:] == 1])/len(y_test) * 100.0)))
+print("Test False     : {0} ({1:0.2f}%)".format(len(y_test[y_test[:] == 0]), (len(y_test[y_test[:] == 0])/len(y_test) * 100.0)))
+
+#%%
