@@ -208,8 +208,8 @@ plot_corr(Malaria_ML)
 num_obs = len(Malaria_ML)
 num_true = len(Malaria_ML.loc[Malaria_ML['Has Mosquito Bed Net for Sleeping'] == 1])
 num_false = len(Malaria_ML.loc[Malaria_ML['Has Mosquito Bed Net for Sleeping'] == 0])
-print("Number of True cases: " + str(num_true) + str(num_true/num_obs) * 100)
-print("Number of False cases:" + str(num_false) + str(num_false/num_obs) * 100)
+print("Number of True cases: {0} ({1:2.2f}%)".format(num_true, (num_true/num_obs) * 100))
+print("Number of False cases: {0} ({1:2.2f}%)".format(num_false, (num_false/num_obs) * 100))
 
 #%%
 #%%
