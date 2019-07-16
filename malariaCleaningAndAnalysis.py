@@ -372,3 +372,43 @@ print(metrics.classification_report(y_test, lr_predict_test))
 # # Using our trained Model (Logistic Regression)
 #%% [/]
 # Save trained model to file
+from sklearn.externals import joblib  
+joblib.dump(lr_model, "Malaria Model")
+
+#%%
+#load trained model
+lr_model = joblib.load('Malaria Model')
+
+#%%
+#Test prediction on data and once the model is loaded
+
+Malaria_Predic = pd.read_csv("./NG_2015_MIS_07012019_1354_135943/numeric_nmis.csv")
+
+#%%
+Malaria_Predic.head(5)
+
+#%%
+#Test data contains a few rows
+
+#%%
+#We will do some cleaning as before
+Malaria_Predic.columns=['Case Identification', 'Region', 'Type of Place of Residence', 'Source of Drinking Water', 'Type of Toilet Facility',
+                'Has Electricity', 'Main Floor Material', 'Main Wall Material', 'Main Roof Material', 'Has Bicycle', 'Has Motorcycle/Scooter',
+                'Has Car/Truck', 'Has Mosquito Bed Net for Sleeping', 'Owns Land Suitable for Agriculture', 'Has Bank Account', 
+                'Wealth Index', 'Cost of Treatment for Fever', 'State']
+print(Malaria_Predic.shape)
+Malaria_Predic.head()
+
+#%%
+Malaria_Predic.columns=[str.replace('/','or') for str in Malaria_Predic.columns]
+
+#%%
+Malaria_Predic.drop(['Type of Toilet Facility', 'Cost of Treatment for Fever', 'Case Identification', 'State'], axis=1, inplace=True)
+
+
+#%%
+Malaria_Predic.head()
+
+#%%
+#We need to drop 'Has Mosquito Bed Net for Sleeping" since that is what we are preicting
+#Store data without the column with prefix X as we did with the X_train and X_test to indicate that it only contains the columns we are predicting
