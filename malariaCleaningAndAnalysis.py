@@ -385,7 +385,7 @@ lr_model = joblib.load('Malaria Model')
 Malaria_Predic = pd.read_csv("./NG_2015_MIS_07012019_1354_135943/numeric_nmis.csv")
 
 #%%
-Malaria_Predic.head(5)
+Malaria_Predic.head()
 
 #%%
 #Test data contains a few rows
@@ -412,3 +412,25 @@ Malaria_Predic.head()
 #%%
 #We need to drop 'Has Mosquito Bed Net for Sleeping" since that is what we are preicting
 #Store data without the column with prefix X as we did with the X_train and X_test to indicate that it only contains the columns we are predicting
+
+#%%
+X_predic = Malaria_Predic
+del X_predic['Has Mosquito Bed Net for Sleeping']
+
+#%%
+X_predic
+
+#%% [markdown]
+# At this point our data is ready to be used for prediction.
+
+#%% [markdown]
+# Predict 'Has Mosquito Bed Net for Sleeping' with the prediction data. Returns 1 if True, 0 if false
+
+#%%
+Malaria_Predic.head()
+
+#%%
+lr_model.predict(X_predic)
+
+#%%
+# Our Model predicts well. Mision Accomplished!!
