@@ -230,6 +230,13 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=split_test_s
 # test_size = 0.3 is 30%, 42 is the answer to everything
 
 #%%
+#Get an idea bout the rows and columns we have obtained
+print("\nX_train:\n")
+print(X_train.shape)
+
+print("\nX_test:\n")
+print(X_test.shape)
+#%%
 # check we have the the desired 70% train, 30% test split of the data.
 
 #%%
@@ -250,3 +257,158 @@ print("Test True      : {0} ({1:0.2f}%)".format(len(y_test[y_test[:] == 1]), (le
 print("Test False     : {0} ({1:0.2f}%)".format(len(y_test[y_test[:] == 0]), (len(y_test[y_test[:] == 0])/len(y_test) * 100.0)))
 
 #%%
+# # Training Algorithm - Using Naive Bayes Machine Learning Model
+# # Using Logistic Regression
+from sklearn.naive_bayes import GaussianNB
+
+# create Gaussian Naive Bayes model object and train it with the data
+nb_model = GaussianNB()
+
+nb_model.fit(X_train, y_train.ravel())
+
+#%% [markdown]
+# Performance on Training Data
+
+#%%
+# predict values using the training data
+nb_predict_train = nb_model.predict(X_train)
+
+# import the performance metrics library
+from sklearn import metrics
+
+# Accuracy
+print("Accuracy: {0:.4f}".format(metrics.accuracy_score(y_train, nb_predict_train)))
+print()
+
+#%% [markdown]
+# Our accurancy rate is 63% on the training data. This is below the 70% benchmark for our ideal ML Model.
+#%% [markdown]
+# Performance on Testing Data
+
+#%%
+# predict values using the testing data
+nb_predict_test = nb_model.predict(X_test)
+
+from sklearn import metrics
+
+# training metrics
+print("nb_predict_test", nb_predict_test)
+print ("y_test", y_test)
+print("Accuracy: {0:.4f}".format(metrics.accuracy_score(y_test, nb_predict_test)))
+
+
+#%%
+#Accuracy on testing data is also below our 70% benchmark.
+
+
+#%%
+print("Confusion Matrix")
+print("{0}".format(metrics.confusion_matrix(y_test, nb_predict_test)))
+print("")
+
+print("Classification Report")
+print(metrics.classification_report(y_test, nb_predict_test))
+
+#%% [markdown]
+# Our Recall and Precision rate is 70% and 77% respectively. This is ok. However we would try other models if they would work better.
+#%% [markdown]
+# # Using Random Forest
+
+#%%
+from sklearn.ensemble import RandomForestClassifier
+rf_model = RandomForestClassifier(random_state=42, n_estimators=10)      # Create random forest object
+rf_model.fit(X_train, y_train.ravel()) 
+
+#%%
+# Predict Training Data
+
+#%%
+rf_predict_train = rf_model.predict(X_train)
+# training metrics
+print("Accuracy: {0:.4f}".format(metrics.accuracy_score(y_train, rf_predict_train)))
+
+#%% [markdown]
+# Random Forest Accuracy level looks much better.
+#%% [markdown]
+# Predict Test Data
+
+#%%
+rf_predict_test = rf_model.predict(X_test)
+
+# training metrics
+print("Accuracy: {0:.4f}".format(metrics.accuracy_score(y_test, rf_predict_test)))
+
+#%% [markdown]
+# But this is slightly below 70% for our test data.
+
+#%%
+print(metrics.confusion_matrix(y_test, rf_predict_test) )
+print("")
+print("Classification Report")
+print(metrics.classification_report(y_test, rf_predict_test))
+
+#%% [markdown]
+# Our precision and Recall recorded good values based on true 'Yes' and 'No' for ownership of Mosquito Bed Net for Sleeping though the accuracy level on the test data is slightly less than our 70% benchmark.
+#%% [markdown]
+# # Using Logistic Regression
+
+#%%
+from sklearn.linear_model import LogisticRegression
+
+lr_model =LogisticRegression(C=0.7, random_state=42, solver='liblinear', max_iter=10000)
+lr_model.fit(X_train, y_train.ravel())
+lr_predict_test = lr_model.predict(X_test)
+
+# training metrics
+print("Accuracy: {0:.4f}".format(metrics.accuracy_score(y_test, lr_predict_test)))
+print(metrics.confusion_matrix(y_test, lr_predict_test) )
+print("")
+print("Classification Report")
+print(metrics.classification_report(y_test, lr_predict_test))
+
+#%% [markdown]
+# Logistic Regression Model performed best for our prediction. So we would finally go with the Logistics Regression Model.
+#%% [markdown]
+# # Using our trained Model (Logistic Regression)
+#%% [/]
+# Save trained model to file
+from sklearn.externals import joblib  
+joblib.dump(lr_model, "Malaria Model")
+
+#%%
+#load trained model
+lr_model = joblib.load('Malaria Model')
+
+#%%
+#Test prediction on data and once the model is loaded
+
+Malaria_Predic = pd.read_csv("./NG_2015_MIS_07012019_1354_135943/numeric_nmis.csv")
+
+#%%
+Malaria_Predic.head(5)
+
+#%%
+#Test data contains a few rows
+
+#%%
+#We will do some cleaning as before
+Malaria_Predic.columns=['Case Identification', 'Region', 'Type of Place of Residence', 'Source of Drinking Water', 'Type of Toilet Facility',
+                'Has Electricity', 'Main Floor Material', 'Main Wall Material', 'Main Roof Material', 'Has Bicycle', 'Has Motorcycle/Scooter',
+                'Has Car/Truck', 'Has Mosquito Bed Net for Sleeping', 'Owns Land Suitable for Agriculture', 'Has Bank Account', 
+                'Wealth Index', 'Cost of Treatment for Fever', 'State']
+print(Malaria_Predic.shape)
+Malaria_Predic.head()
+
+#%%
+Malaria_Predic.columns=[str.replace('/','or') for str in Malaria_Predic.columns]
+
+#%%
+Malaria_Predic.drop(['Type of Toilet Facility', 'Cost of Treatment for Fever', 'Case Identification', 'State'], axis=1, inplace=True)
+
+
+#%%
+Malaria_Predic.head()
+
+#%%
+#We need to drop 'Has Mosquito Bed Net for Sleeping" since that is what we are preicting
+#Store data without the column with prefix X as we did with the X_train and X_test to indicate that it only contains the columns we are predicting
