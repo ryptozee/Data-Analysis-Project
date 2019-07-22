@@ -68,9 +68,6 @@ Malaria.head()
 df = pd.DataFrame(Malaria)
 
 #%%
-df
-
-#%%
 #Descriptive statistics/analysis
 
 #%%
@@ -382,7 +379,7 @@ lr_model = joblib.load('Malaria Model')
 #%%
 #Test prediction on data and once the model is loaded
 
-Malaria_Predic = pd.read_csv("./NG_2015_MIS_07012019_1354_135943/numeric_nmis.csv")
+Malaria_Predic = pd.read_csv("./NG_2015_MIS_07012019_1354_135943/numeric_mtd.csv")
 
 #%%
 Malaria_Predic.head()
@@ -434,3 +431,265 @@ lr_model.predict(X_predic)
 
 #%%
 # Our Model predicts well. Mision Accomplished!!
+
+Malaria_Visual = pd.read_csv("./NG_2015_MIS_07012019_1354_135943/numeric_nmis.csv")
+Malaria_Visual.columns=['Case Identification', 'Region', 'Type of Place of Residence', 'Source of Drinking Water', 'Type of Toilet Facility',
+                'Has Electricity', 'Main Floor Material', 'Main Wall Material', 'Main Roof Material', 'Has Bicycle', 'Has Motorcycle/Scooter',
+                'Has Car/Truck', 'Has Mosquito Bed Net for Sleeping', 'Owns Land Suitable for Agriculture', 'Has Bank Account', 
+                'Wealth Index', 'Cost of Treatment for Fever', 'State']
+
+print(Malaria_Visual.shape)
+Malaria_Visual.head()
+
+#%%
+#Check for Missing Values
+(Malaria_Visual.astype(np.object).isnull()).any()
+
+#%% [markdown]
+# Column 'Cost of Treatment of Fever' containing NaN values is removed.
+
+#%%
+Malaria_Visual.drop('Cost of Treatment for Fever', axis = 1, inplace = True)
+
+
+#%%
+Malaria_Visual.head()
+
+#%% [markdown]
+# We would put the table in form of Pandas DataFrame.
+
+#%%
+df=pd.DataFrame (Malaria_Visual)
+
+#%% [markdown]
+# Now we would create and assign a list of dictionaries to recode the numerical values of SOME categorical variables in our dataset with human-readable text.
+
+#%%
+dict = [['Has Electricity',
+        {1:'yes',
+        0:'No'}],
+       ['Type of Place of Residence',
+       {1:'Urban',
+       2:'Rural'}]]
+for col_dict in dict:
+    col=col_dict[0]
+    dict=col_dict[1]
+    df[col]=[dict[x] for x in df[col]]
+
+
+#%%
+dict = [['Source of Drinking Water',
+        {10:'Piped water',
+         11:'Piped into dwelling',
+         12:'Piped to yard/plot',
+         13:'public tap/standpipe',
+         14:'Piped to Neighbour',
+         20:'Tube well water',
+         21:'Tube well or borehole',
+         30:'Dug well (open/protected)',
+         31:'Protected well',
+         32:'Unprotected well',
+         40:'Surface water',
+         41:'Protected spring',
+         42:'Unprotected spring',
+         43:'River/dam/lake/ponds/stream/canal/irrigation channel',
+         51:'Rain water',
+         61:'Tanker truck',
+         62:'Cart with small tank',
+         71:'Bottled water',
+         72:'Sachet water',
+         96:'Other'}]]
+
+for col_dict in dict:
+    col=col_dict[0]
+    dict=col_dict[1]
+    df[col]=[dict[x] for x in df[col]]
+
+
+#%%
+dict = [['Region',
+       {1:'North central',
+        2:'North east',
+        3:'North west',
+        4:'South east',
+        5:'South south',
+        6:'South west'}]]
+for col_dict in dict:
+    col=col_dict[0]
+    dict=col_dict[1]
+    df[col]=[dict[x] for x in df[col]]
+
+
+#%%
+dict = [['State',
+        {10:'Sokoto',
+        20:'Zamfara',
+        30:'Katsina',
+        40:'Jigawa',
+        50:'Yobe',
+        60:'Borno-Urban',
+        70:'Adamawa',
+        80:'Gombe',
+        90:'Bauchi',
+        100:'Kano',
+        110:'Kaduna',
+        120:'Kebbi',
+        130:'Niger',
+        140:'FCT Abuja',
+        150:'Nasarawa',
+        160:'Plateau',
+        170:'Taraba',
+        180:'Benue',
+        190:'Kogi',
+        200:'Kwara',
+        210:'Oyo',
+        220:'Osun',
+        230:'Ekiti',
+        240:'Ondo',
+        250:'Edo',
+        260:'Anambra',
+        270:'Enugu',
+        280:'Ebonyi',
+        290:'Cross River',
+        300:'Akwa Ibom',
+        310:'Abia',
+        320:'Imo',
+        330:'Rivers',
+        340:'Bayelsa',
+        350:'Delta',
+        360:'Lagos',
+        370:'Ogun'}]]
+
+for col_dict in dict:
+    col=col_dict[0]
+    dict=col_dict[1]
+    df[col]=[dict[x] for x in df[col]]
+
+
+#%%
+dict = [['Has Bank Account',
+        {1:'yes',
+         0: 'No'}], 
+         ['Has Bicycle',
+         {1:'yes',
+         0:'No'}]]         
+        
+for col_dict in dict:
+    col=col_dict[0]
+    dict=col_dict[1]
+    df[col]=[dict[x] for x in df[col]]
+
+
+#%%
+dict = [['Has Mosquito Bed Net for Sleeping',
+        {1:'yes',
+         0: 'No'}], 
+         ['Has Car/Truck',
+         {1:'yes',
+         0:'No'}]]         
+        
+for col_dict in dict:
+    col=col_dict[0]
+    dict=col_dict[1]
+    df[col]=[dict[x] for x in df[col]]
+
+
+#%%
+dict = [['Wealth Index',
+        {1:'Poorest',
+         2:'Poorer',
+         3:'Middle',
+         4:'Richer',
+         5:'Richest'}]]         
+        
+for col_dict in dict:
+    col=col_dict[0]
+    dict=col_dict[1]
+    df[col]=[dict[x] for x in df[col]]
+
+
+#%%
+dict = [['Has Motorcycle/Scooter',
+        {1:'yes',
+         0: 'No'}]]         
+        
+for col_dict in dict:
+    col=col_dict[0]
+    dict=col_dict[1]
+    df[col]=[dict[x] for x in df[col]]
+
+
+#%%
+df
+
+#%% [markdown]
+# Fine with the missing values check and recoding of some categorical variables
+# Now on to visualizing the dataset.
+
+#%%
+def plot_box(df, cols, col_x = 'Has Mosquito Bed Net for Sleeping'):
+    for col in cols:
+        sb.set_style("whitegrid")
+        sb.boxplot(col_x, col, data=df)
+        plt.xlabel(col_x) # Set text for the x axis
+        plt.ylabel(col)# Set text for y axis
+        plt.show()
+
+num_cols = ['Case Identification']
+plot_box(df, num_cols)
+
+#%% [markdown]
+# From the boxplot above, there is obvious gap in the number of people who indicated having no Mosquito Bed Net for Sleeping and those who indicated they have. 
+
+#%%
+def plot_box(df, col, col_y = 'Case Identification'):
+    sb.set_style("whitegrid")
+    sb.boxplot(col, col_y, data=df)
+    plt.xlabel(col) # Set text for the x axis
+    plt.ylabel(col_y)# Set text for y axis
+    plt.show()
+    
+plot_box(df, 'Wealth Index')    
+
+#%% [markdown]
+# From the box plot, the gap between Richer and Richest is not obvious. While the gap between the Middle, Poorest and Poorer is very obvious.
+
+#%%
+def plot_box(df, col, col_y = 'Case Identification'):
+    sb.set_style("whitegrid")
+    sb.boxplot(col, col_y, data=df)
+    plt.xlabel(col) # Set text for the x axis
+    plt.ylabel(col_y)# Set text for y axis
+    plt.show()
+    
+plot_box(df, 'Region')    
+
+#%% [markdown]
+# As expected regions are distinct from each other.
+
+#%%
+def plot_box(df, col, col_y = 'Case Identification'):
+    sb.set_style("whitegrid")
+    sb.boxplot(col, col_y, data=df)
+    plt.xlabel(col) # Set text for the x axis
+    plt.ylabel(col_y)# Set text for y axis
+    plt.show()
+    
+plot_box(df, 'Has Electricity')    
+
+#%% [markdown]
+# There is obvious difference in the number of people having and not having electricity.
+
+#%%
+def plot_box(df, col, col_y = 'Case Identification'):
+    sb.set_style("whitegrid")
+    sb.boxplot(col, col_y, data=df)
+    plt.xlabel(col) # Set text for the x axis
+    plt.ylabel(col_y)# Set text for y axis
+    plt.show()
+    
+plot_box(df, 'Type of Place of Residence')    
+
+#%% [markdown]
+# As expected type of places of residence is also obviously distinct. 
+#%% [markdown]
