@@ -274,7 +274,7 @@ nb_predict_train = nb_model.predict(X_train)
 from sklearn import metrics
 
 # Accuracy
-print("Accuracy: {0:.4f}".format(metrics.accuracy_score(y_train, nb_predict_train)))
+print("Accuracy: {0:.0f}%".format(metrics.accuracy_score(y_train, nb_predict_train)*100))
 print()
 
 #%% [markdown]
@@ -291,7 +291,7 @@ from sklearn import metrics
 # training metrics
 print("nb_predict_test", nb_predict_test)
 print ("y_test", y_test)
-print("Accuracy: {0:.4f}".format(metrics.accuracy_score(y_test, nb_predict_test)))
+print("Accuracy: {0:.0f}%".format(metrics.accuracy_score(y_test, nb_predict_test)*100))
 
 
 #%%
@@ -322,7 +322,7 @@ rf_model.fit(X_train, y_train.ravel())
 #%%
 rf_predict_train = rf_model.predict(X_train)
 # training metrics
-print("Accuracy: {0:.4f}".format(metrics.accuracy_score(y_train, rf_predict_train)))
+print("Accuracy: {0:.0f}%".format(metrics.accuracy_score(y_train, rf_predict_train)*100))
 
 #%% [markdown]
 # Random Forest Accuracy level looks much better.
@@ -333,7 +333,7 @@ print("Accuracy: {0:.4f}".format(metrics.accuracy_score(y_train, rf_predict_trai
 rf_predict_test = rf_model.predict(X_test)
 
 # training metrics
-print("Accuracy: {0:.4f}".format(metrics.accuracy_score(y_test, rf_predict_test)))
+print("Accuracy: {0:.0f}%".format(metrics.accuracy_score(y_test, rf_predict_test)*100))
 
 #%% [markdown]
 # But this is slightly below 70% for our test data.
@@ -357,8 +357,9 @@ lr_model.fit(X_train, y_train.ravel())
 lr_predict_test = lr_model.predict(X_test)
 
 # training metrics
-print("Accuracy: {0:.4f}".format(metrics.accuracy_score(y_test, lr_predict_test)))
-print(metrics.confusion_matrix(y_test, lr_predict_test) )
+print("Accuracy: {0:.0f}%".format(metrics.accuracy_score(y_test, lr_predict_test)*100))
+print("Precision: {0:.0f}%".format(metrics.precision_score(y_test, lr_predict_test)*100))
+print("Recall: {0:.0f}%".format(metrics.recall_score(y_test, lr_predict_test)*100))
 print("")
 print("Classification Report")
 print(metrics.classification_report(y_test, lr_predict_test))
