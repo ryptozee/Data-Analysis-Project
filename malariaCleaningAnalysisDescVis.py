@@ -198,7 +198,7 @@ plot_corr(Malaria_ML)
 
 #%%
 # The correlations look good. There appear to be no coorelated columns.
-# Next we want to check class distribution
+## Next we want to check class distribution
 #%%
 num_obs = len(Malaria_ML)
 num_true = len(Malaria_ML.loc[Malaria_ML['Has Mosquito Bed Net for Sleeping'] == 1])
@@ -214,14 +214,21 @@ print("Number of False cases: {0} ({1:2.2f}%)".format(num_false, (num_false/num_
 # 70% for training, 30% for testing
 
 #%%
+#Let us explore our target variable and visualize it
+##Pictorial representation of the target variable
+#%%
+sb.countplot(x='Has Mosquito Bed Net for Sleeping', data=Malaria_ML, palette='hls')
+plt.show()
+
+#%%
 #from sklearn.cross_validation import train_test_split
 from sklearn.model_selection import train_test_split
-feature_col_names = ['Region', 'Type of Place of Residence', 'Source of Drinking Water', 'Has Electricity', 'Wealth Index', 'Has Bicycle', 'Has MotorcycleorScooter', 'Has CarorTruck' , 'Owns Land Suitable for Agriculture', 'Has Bank Account' , 'Main Floor Material' ,'Main Wall Material' , 'Main Roof Material']
-predicted_class_names = ['Has Mosquito Bed Net for Sleeping']
+feature_col_names = ['Region', 'Type of Place of Residence', 'Source of Drinking Water', 'Has Electricity', 'Wealth Index', 'Has Bicycle', 'Has MotorcycleorScooter', 'Has CarorTruck' , 'Owns Land Suitable for Agriculture', 'Has Bank Account' , 'Main Floor Material' ,'Main Wall Material' , 'Main Roof Material'] #independent variables (feature variables)
+predicted_class_names = ['Has Mosquito Bed Net for Sleeping'] #dependent variable (target)
 
 X = Malaria_ML[feature_col_names].values     # predictor feature columns (8 X m)
 y = Malaria_ML[predicted_class_names].values # predicted class (1=true, 0=false) column (1 X m)
-split_test_size = 0.30
+split_test_size = 0.30 #test_size specifies the proportion of the test set
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=split_test_size, random_state=42) 
 # test_size = 0.3 is 30%, 42 is the answer to everything
@@ -356,18 +363,35 @@ lr_model =LogisticRegression(C=0.7, random_state=42, solver='liblinear', max_ite
 lr_model.fit(X_train, y_train.ravel())
 lr_predict_test = lr_model.predict(X_test)
 
-# training metrics
+## training metrics
+#Confusion Matrix Evaluation Metrics
 print("Accuracy: {0:.0f}%".format(metrics.accuracy_score(y_test, lr_predict_test)*100))
 print("Precision: {0:.0f}%".format(metrics.precision_score(y_test, lr_predict_test)*100))
 print("Recall: {0:.0f}%".format(metrics.recall_score(y_test, lr_predict_test)*100))
 print("")
 print("Classification Report")
 print(metrics.classification_report(y_test, lr_predict_test))
+print(metrics.confusion_matrix(y_test, lr_predict_test))
+
+#%%
+##Visualizing Confusion Matrix using Heatmap
+fig, ax = plt.subplots()
+tick_marks = np.arange(len(['Has Mosquito Bed Net for Sleeping']))
+plt.xticks(tick_marks, ['Has Mosquito Bed Net for Sleeping'])
+plt.yticks(tick_marks, ['Has Mosquito Bed Net for Sleeping'])
+sb.heatmap(pd.DataFrame(metrics.confusion_matrix(y_test, lr_predict_test)), annot=True, cmap="viridis", fmt='g')
+ax.xaxis.set_label_position("top")
+plt.tight_layout()
+plt.title('Confusion Matrix', y=1.1)
+plt.ylabel('Actual label')
+plt.xlabel('Has Mosquito Bed Net for Sleeping')
 
 #%% [markdown]
 # Logistic Regression Model performed best for our prediction. So we would finally go with the Logistics Regression Model.
+
 #%% [markdown]
 # # Using our trained Model (Logistic Regression)
+
 #%% [/]
 # Save trained model to file
 from sklearn.externals import joblib  
