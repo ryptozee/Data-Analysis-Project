@@ -258,7 +258,7 @@ print("Test False     : {0} ({1:0.2f}%)".format(len(y_test[y_test[:] == 0]), (le
 # # Using Logistic Regression
 from sklearn.naive_bayes import GaussianNB
 
-# create Gaussian Naive Bayes model object and train it with the data
+# create Gaussian Naive Bayes Model object and train it with the data
 nb_model = GaussianNB()
 
 nb_model.fit(X_train, y_train.ravel())
